@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+
+namespace Day1
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string file_path = "C:\\Users\\marti\\Desktop\\AdventOfCode\\day1.txt";
+
+            List<int> left_row = new List<int>();
+            List<int> right_row = new List<int>();
+
+            string[] file = File.ReadAllLines(file_path);          
+
+            foreach (string line in file)
+            {
+                string[] num;
+                num = line.Split("   ");
+
+                Int32.TryParse(num[0], out int member);
+                left_row.Add(member);
+
+                Int32.TryParse(num[1], out member);
+                right_row.Add(member);
+            }
+            
+            int distance1 = 0;
+            int distance2 = 0;
+
+            foreach (int left in left_row)
+            {
+                int count = 0;
+                foreach (int right in right_row)
+                {
+                    if (left == right)
+                    { 
+                        count++;
+                    }
+                }
+                distance2 += (left * count);
+            }
+
+            left_row.Sort();
+            right_row.Sort();
+
+            for (int i = 0; i < left_row.Count; i++)
+            {
+                distance1 += Math.Abs(left_row[i] - right_row[i]);
+            } 
+            Console.WriteLine(distance1);
+            Console.WriteLine(distance2);
+        }
+    }
+}
