@@ -7,7 +7,7 @@ namespace Day1
     {
         static void Main(string[] args)
         {
-            string file_path = "C:\\Users\\marti\\Desktop\\AdventOfCode\\day1.txt";
+            string file_path = "...\\Desktop\\AdventOfCode\\day1.txt";
 
             List<int> left_row = new List<int>();
             List<int> right_row = new List<int>();
