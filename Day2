@@ -55,7 +55,7 @@ namespace ReactorSafety
         }
         static void Main(string[] args)
         {
-            string file_path = "C:\\Users\\marti\\Desktop\\AdventOfCode\\day1.txt";
+            string file_path = "C:\\Users\\marti\\Desktop\\AdventOfCode\\day2.txt";
 
             string[] file = File.ReadAllLines(file_path);
 
