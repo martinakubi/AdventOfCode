@@ -1,0 +1,98 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.Metrics;
+using System.IO;
+
+namespace ReactorSafety
+{
+    internal class Program
+    {
+        static bool IsSafe(List<int> nums)
+        {
+            bool isIncreas = true;
+            bool isDecreas = true;
+
+            for (int i = 1; i < nums.Count; i++)
+            {
+                int diff = nums[i] - nums[i - 1];
+
+                if (Math.Abs(diff) > 3 || Math.Abs(diff) < 1)
+                {
+                    return false;
+                }
+
+                if (diff > 0)
+                {
+                    isDecreas = false;
+                }
+
+                if (diff < 0)
+                {
+                    isIncreas = false;
+                }
+            }
+            if (isDecreas || isIncreas)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        static List<List<int>> ListWithoutOne(List<int> numstarter)
+        {
+            List<List<int>> listW = new List<List<int>>();
+            for (int i = 0; i < numstarter.Count; i++)
+            { 
+                List<int> copy = new List<int>(numstarter);
+                copy.RemoveAt(i);
+                listW.Add(copy);
+            }
+            return listW;
+        }
+        static void Main(string[] args)
+        {
+            string file_path = "C:\\Users\\marti\\Desktop\\AdventOfCode\\day1.txt";
+
+            string[] file = File.ReadAllLines(file_path);
+
+            int count = 0;
+
+            foreach (string line in file)
+            {
+                List<int> nums = new List<int>();
+
+                string[] row_num = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (string num in row_num)
+                {
+                    if (Int32.TryParse(num, out int number))
+                    {
+                        nums.Add(number);
+                    }
+                }
+
+                List<List<int>> lists = new List<List<int>>(ListWithoutOne(nums));
+                bool isChecked = false;
+                foreach (List<int> list1 in lists)
+                {
+                    if (IsSafe(list1))
+                    {
+                        isChecked = true;
+                        break;
+                    }
+                }
+                if (isChecked)
+                {
+                    count++;
+                }
+                
+            }
+            Console.WriteLine($"Count is {count.ToString()}.");
+        }
+    }
+        
+}
