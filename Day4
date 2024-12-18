@@ -1,0 +1,142 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics.Metrics;
+using System.IO;
+using System.Text.RegularExpressions;
+
+namespace ReactorSafety
+{
+    internal class Program
+    {
+
+        static void Main(string[] args)
+        {
+            string file_path = "C:\\Users\\marti\\Desktop\\AdventOfCode\\day.txt";
+
+            string[] file = File.ReadAllLines(file_path);
+
+            List<List<char>> Grid = new List<List<char>>();
+
+            foreach (string line in file)
+            {
+                List<char> new_line = new List<char>(line.ToCharArray());
+                Grid.Add(new_line);
+            }
+
+            int count = FindTarget(Grid);
+            Console.WriteLine($"Number of XMAS: {count}");
+
+            int countCrossMax = FindCrossTarget(Grid);
+            Console.WriteLine($"Number of X-MAS: {countCrossMax}");
+
+            int FindTarget(List<List<char>> grid)
+            {
+                int columns = grid.Count;
+                int rows = grid[0].Count;
+                int countXmas = 0;
+
+                for (int i = 0; i < columns; i++)
+                {
+                    for (int j = 0; j < rows; j++)
+                    {
+                        if (IsXmas(grid, i, j, 0, 1)) { countXmas++; };
+                        if (IsXmas(grid, i, j, 1, 1)) { countXmas++; };
+                        if (IsXmas(grid, i, j, 1, 0)) { countXmas++; };
+                        if (IsXmas(grid, i, j, 1, -1)) { countXmas++; };  
+                    }
+                }
+                return countXmas;
+            }
+
+            int FindCrossTarget(List<List<char>> grid)
+            {
+                int columns = grid.Count;
+                int rows = grid[0].Count;
+                int countCrossXmas = 0;
+
+                for (int i = 0; i < columns; i++)
+                {
+                    for (int j = 0; j < rows; j++)
+                    {
+                        if (grid[i][j] == 'A')
+                        {
+                            if (IsCrossXmas(grid, i -1, j - 1, 1, 1) && IsCrossXmas(grid, i - 1, j + 1, 1, -1)) { countCrossXmas++; };
+                        }
+                    }
+                }
+                return countCrossXmas;
+            }
+
+            bool IsXmas(List<List<char>> grid, int a, int b, int c, int d)
+            {
+                string target1 = "XMAS";
+                bool isOpposit1 = false;
+
+                for (int i = 0; i < target1.Length; i++)
+                {
+                    int x = a + i * c;
+                    int y = b + i * d;
+
+                    if (x < 0 || y < 0 || x >= grid.Count || y >= grid[0].Count)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        if (i == 0 && grid[x][y] != target1[0]) 
+                        { 
+                            isOpposit1 = true; 
+                        }
+
+                        if (!isOpposit1 && grid[x][y] != target1[i])
+                        {
+                            return false;
+                        }
+                        else if (isOpposit1 && grid[x][y] != target1[target1.Length - 1 - i])
+                        { 
+                            return false; 
+                        }
+                    }
+                }
+                return true;
+            }
+
+            bool IsCrossXmas(List<List<char>> grid, int a, int b, int c, int d)
+            {
+                string target = "MAS";
+                bool isOpposit = false;
+
+                for (int i = 0; i < target.Length; i = i + 2)
+                {
+                    int x = a + i * c;
+                    int y = b + i * d;
+
+                    if (x < 0 || y < 0 ||x >= grid.Count || y >= grid[0].Count)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        if (i == 0 && grid[x][y] != target[0]) 
+                        { 
+                            isOpposit = true; 
+                        }
+
+                        if (!isOpposit && grid[x][y] != target[i])
+                        { 
+                            return false; 
+                        }
+                        else if (isOpposit && grid[x][y] != target[target.Length - 1 - i])
+                        { 
+                            return false; 
+                        }   
+                    }
+                }
+                return true;
+            }
+        }
+    }
+}
+
